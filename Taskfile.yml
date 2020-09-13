@@ -2,15 +2,13 @@
 
 version: '3'
 
-vars:
-  GREETING: Hello, World!
-
 tasks:
   default:
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - task --list
+
   build-grpc:
+    desc: Build GRPC files
     deps: [clean]
     cmds:
     - cmd: mkdir protobuf
@@ -19,6 +17,7 @@ tasks:
     - protoc --go_out=protobuf/ --go-grpc_out=protobuf/ --proto_path=api/grpc-spec reservation-service_v1.proto
 
   clean:
+    desc: Clean project
     cmds:
       - cmd: rm -rd protobuf
         ignore_error: true

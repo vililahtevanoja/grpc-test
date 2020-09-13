@@ -1,0 +1,25 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+  build-grpc:
+    deps: [clean]
+    cmds:
+    - cmd: mkdir protobuf
+      ignore_error: true
+      silent: true
+    - protoc --go_out=protobuf/ --go-grpc_out=protobuf/ --proto_path=api/grpc-spec reservation-service_v1.proto
+
+  clean:
+    cmds:
+      - cmd: rm -rd protobuf
+        ignore_error: true
+        silent: true

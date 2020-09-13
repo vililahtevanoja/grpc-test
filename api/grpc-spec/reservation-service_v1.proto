@@ -1,0 +1,17 @@
+syntax = 'proto3';
+package reservationgrpc;
+option go_package = 'github.com/vililahtevanoja/grpc-test/reservationgrpc';
+
+service Reservation {
+  rpc TryGetReservation(Credentials) returns (TryGetReservationResponse) {};
+}
+
+message TryGetReservationResponse {
+  bool result = 1;
+  string msg = 2;
+}
+
+message Credentials {
+  string Username = 1;
+  string Password = 2;
+}

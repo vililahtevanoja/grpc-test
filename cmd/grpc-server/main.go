@@ -14,7 +14,11 @@ import (
 
 const port = ":5000"
 
-func TryGetReservation(ctx context.Context, in *reservationgrpc.Credentials) (*reservationgrpc.TryGetReservationResponse, error) {
+type reservationServer struct {
+	reservationgrpc.ReservationServer
+}
+
+func (s reservationServer) TryGetReservation(ctx context.Context, in *reservationgrpc.Credentials) (*reservationgrpc.TryGetReservationResponse, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	println(fmt.Sprintf("API-key: %s", strings.Join(md["x-api-key"], "")))
 	result := rand.Int() % 2 == 0
@@ -31,7 +35,7 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	s := grpc.NewServer()
-	reservationgrpc.RegisterReservationService(s, &reservationgrpc.ReservationService{TryGetReservation: TryGetReservation})
+	reservationgrpc.RegisterReservationServer(s, reservationServer{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
